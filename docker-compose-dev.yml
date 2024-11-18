@@ -1,5 +1,9 @@
 services:
   client-react-nginx:
+    # for shipyard
+    labels:
+      shipyard.primary-route: true
+      shipyard.route: '/'
     image: client-react-nginx
     build:
       context: ./client-react
@@ -12,6 +16,10 @@ services:
     restart: unless-stopped
 
   api-node:
+    # for shipyard
+    labels:
+      shipyard.route: '/api/node/'
+      shipyard.route.rewrite: true
     image: api-node
     build:
       context: ./api-node
@@ -34,6 +42,10 @@ services:
     restart: unless-stopped
 
   api-golang:
+    # for shipyard
+    labels:
+      shipyard.route: '/api/golang/'
+      shipyard.route.rewrite: true
     image: api-golang
     build:
       context: ./api-golang
