@@ -1,72 +1,79 @@
-version: "3.9"
 services:
   client-react-nginx:
     image: client-react-nginx
     build:
-      context: ./client-react/
+      context: ./client-react
       dockerfile: Dockerfile.5
     init: true
     networks:
       - frontend
     ports:
-      - 80:8080
+      - "80:8080"
     restart: unless-stopped
+
   api-node:
     image: api-node
     build:
-      context: ./api-node/
+      context: ./api-node
       dockerfile: Dockerfile.9
       target: dev
     init: true
     volumes:
-      - type: bind
-        source: api-node/
-        target: /usr/src/app/
-      - type: volume
-        target: /usr/src/app/node_modules
+      - ./api-node:/usr/src/app
+      - node_modules:/usr/src/app/node_modules
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     environment:
-      - DATABASE_URL=postgres://postgres:foobarbaz@db:5432/postgres
+      DATABASE_URL: postgres://postgres:foobarbaz@db:5432/postgres
     networks:
       - frontend
       - backend
     ports:
-      - 3000:3000
+      - "3000:3000"
     restart: unless-stopped
+
   api-golang:
     image: api-golang
     build:
-      context: ./api-golang/
+      context: ./api-golang
       dockerfile: Dockerfile.8
       target: dev
     init: true
     volumes:
-      - type: bind
-        source: api-golang/
-        target: /app/
+      - ./api-golang:/app
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     environment:
-      - DATABASE_URL=postgres://postgres:foobarbaz@db:5432/postgres
+      DATABASE_URL: postgres://postgres:foobarbaz@db:5432/postgres
     networks:
       - frontend
       - backend
     ports:
-      - 8080:8080
+      - "8080:8080"
     restart: unless-stopped
+
   db:
     image: postgres:15.1-alpine
+    environment:
+      POSTGRES_PASSWORD: foobarbaz
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     volumes:
       - pgdata:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_PASSWORD=foobarbaz
     networks:
       - backend
     ports:
-      - 5432:5432
+      - "5432:5432"
+
 volumes:
   pgdata:
+  node_modules:
+
 networks:
   frontend:
   backend:
