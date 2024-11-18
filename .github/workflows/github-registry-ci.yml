@@ -4,12 +4,29 @@ on:
 jobs:
   build_and_publish:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        image:
+          - name: Api-Node
+            dockerfile: ./api-node/Dockerfile.9
+            context: ./api-node/
+            tag: ghcr.io/adeniyilowee/api-node:latest
+          - name: Api-Golang
+            dockerfile: ./api-golang/Dockerfile.8
+            context: ./api-golang/
+            tag: ghcr.io/adeniyilowee/api-golang:latest
+          - name: Nginx-Frontend
+            dockerfile: ./client-react/Dockerfile.5
+            context: ./client-react/
+            tag: ghcr.io/adeniyilowee/client-react:latest
     steps:
       - uses: actions/checkout@v3
-      - name: Log in to GitHub Container Registry
+
+      - name: Login to GHCR
         run: |
           docker login --username Adeniyilowee --password ${{ secrets.DEPLOYED_WA_PAT }} ghcr.io
-      - name: Build and push the image into Reg
+
+      - name: Build and push the image
         run: |
-          docker compose -f docker-compose-dev.yml build
-          docker compose -f docker-compose-dev.yml push
+          docker build -f ${{ matrix.image.dockerfile }} ${{ matrix.image.context }} --tag ${{ matrix.image.tag }}
+          docker push ${{ matrix.image.tag }}

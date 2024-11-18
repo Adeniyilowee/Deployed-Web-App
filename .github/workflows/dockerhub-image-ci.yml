@@ -19,9 +19,9 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: |
-            Adeniyi01/api-node
-            Adeniyi01/api-golang
-            Adeniyi01/nginx-frontend
+            adeniyi01/api-node
+            adeniyi01/api-golang
+            adeniyi01/nginx-frontend
           tags: |
             type=raw,value=latest
             type=ref,event=branch
