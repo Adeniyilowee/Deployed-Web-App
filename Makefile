@@ -14,11 +14,11 @@ compose-up:
 
 .PHONY: compose-up-build
 compose-up-build:
-	docker compose -f $(DEV_COMPOSE_FILE) up --build
+	docker compose -f $(DEV_COMPOSE_FILE) up -d --build
 
 .PHONY: compose-up-debug-build
 compose-up-debug-build:
-	docker compose -f $(DEV_COMPOSE_FILE) -f $(DEBUG_COMPOSE_FILE) up --build
+	docker compose -f $(DEV_COMPOSE_FILE) -f $(DEBUG_COMPOSE_FILE) up -d --build
 
 .PHONY: compose-down
 compose-down:
