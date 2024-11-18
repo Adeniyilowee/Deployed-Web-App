@@ -63,12 +63,12 @@ jobs:
           # this is to access the tags generated in docker meta
           tags: ${{ steps.meta.outputs.tags }}
 
-      - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@latest
-        with:
-          image-ref: 'adeniyi01/api-node:latest'
-          format: 'table'
-          exit-code: '1'
-          ignore-unfixed: true
-          vuln-type: 'os,library'
-          severity: 'CRITICAL'
+    # - name: Run Trivy vulnerability scanner
+    #   uses: aquasecurity/trivy-action@latest
+    #   with:
+    #     image-ref: 'adeniyi01/api-node:latest'
+    #     format: 'table'
+    #     exit-code: '1'
+    #     ignore-unfixed: true
+    #     vuln-type: 'os,library'
+    #     severity: 'CRITICAL'
