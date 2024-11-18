@@ -1,0 +1,15 @@
+name: Docker Image CI for GHCR
+on:
+  push
+jobs:
+  build_and_publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Log in to GitHub Container Registry
+        run: |
+          docker login --username Adeniyilowee --password ${{ secrets.DEPLOYED_WA_PAT }} ghcr.io
+      - name: Build and push the image
+        run: |
+          docker compose -f docker-compose-dev.yml build
+          docker compose -f docker-compose-dev.yml push
