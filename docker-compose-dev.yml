@@ -24,7 +24,7 @@ services:
     build:
       context: ./api-node
       dockerfile: Dockerfile.9
-      target: dev
+      target: production
     init: true
     volumes:
       - ./api-node:/usr/src/app
