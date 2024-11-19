@@ -26,12 +26,8 @@ services:
       dockerfile: Dockerfile.9
       target: production
     init: true
-    volumes:
-      - ./api-node:/usr/src/app
-      - node_modules:/usr/src/app/node_modules
     depends_on:
-      db:
-        condition: service_healthy
+      - db
     environment:
       DATABASE_URL: postgres://postgres:foobarbaz@db:5432/postgres
     networks:
@@ -80,8 +76,6 @@ services:
 
 volumes:
   pgdata:
-  node_modules:
-
 networks:
   frontend:
   backend:

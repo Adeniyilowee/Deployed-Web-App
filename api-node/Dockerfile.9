@@ -21,6 +21,12 @@ CMD ["npm", "run", "dev"]
 
 FROM base as production
 
+WORKDIR /usr/src/app
+
+# Copy only files required to install
+# dependencies (better layer caching)
+COPY package*.json ./
+
 # Set NODE_ENV
 ENV NODE_ENV production
 
